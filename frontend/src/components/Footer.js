@@ -1,5 +1,6 @@
 import React from 'react'
-import { FaEnvelope, FaLocationArrow, FaMap, FaPhoneAlt } from 'react-icons/fa'
+import { FaEnvelope, FaLocationArrow, FaPhoneAlt } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
@@ -20,13 +21,10 @@ const Footer = () => {
             <h1 className='fs-3 fw-bold'>Quick Links</h1>
 
             <p>
-              <a href=''>Home</a>
+              <Link to='/'>Home</Link>
             </p>
             <p>
-              <a href=''>Login</a>
-            </p>
-            <p>
-              <a href=''>Cart</a>
+              <Link to='/cart'>Cart</Link>
             </p>
           </div>
 
@@ -34,16 +32,16 @@ const Footer = () => {
             <h1 className='fs-3 fw-bold'>Contact Us</h1>
 
             <p>
-              <FaLocationArrow /> <a href=''>Head Office</a> <br />
+              <FaLocationArrow /> <Link to='/'>Head Office</Link> <br />
               <span className='pl-3'> 123, Main Street, Your City</span>
             </p>
             <p>
-              <FaPhoneAlt /> <a href=''>Phone Number</a> <br />
+              <FaPhoneAlt /> <Link to='/'>Phone Number</Link> <br />
               <span className='pl-3'> +123 456 7890</span> <br />
               <span className='pl-3'> +123 456 7890</span> <br />
             </p>
             <p>
-              <FaEnvelope /> <a href=''>Email</a> <br />
+              <FaEnvelope /> <Link to='/'>Email</Link> <br />
               <span className='pl-3'> free@infoexample.com</span> <br />
               <span className='pl-3'> free@infoexample.com</span> <br />
             </p>

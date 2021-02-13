@@ -9,6 +9,9 @@ const Navigation = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const cart = useSelector((state) => state.cart)
+  const { cartItems } = cart
+
   const logoutHandler = () => {
     dispatch(logout())
   }
@@ -52,6 +55,11 @@ const Navigation = () => {
           </span>
           <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
             <li>
+              <Link to='/admin/product' className='dropdown-item'>
+                Product
+              </Link>
+            </li>
+            <li>
               <Link to='/admin/users' className='dropdown-item'>
                 Users
               </Link>
@@ -83,7 +91,7 @@ const Navigation = () => {
   )
 
   return (
-    <div className='sticky-top bg-light'>
+    <div className='sticky-top bg-light mb-2'>
       <div className='text-right p-2 container '>
         <div className='p-2 '>
           <FaPhoneAlt /> <a href='tel:+252615301507'>+252 61 530 1507</a> -{' '}
@@ -94,7 +102,7 @@ const Navigation = () => {
 
       <nav className='navbar navbar-expand-md navbar-light bg-light shadow-sm '>
         <div className='container'>
-          <Link className='navbar-brand fw-bold fs-4' to='/'>
+          <Link className='navbar-brand fw-bold fs-5' to='/'>
             GeelTech.com
           </Link>
 
@@ -112,8 +120,13 @@ const Navigation = () => {
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav ml-auto mb-2 mb-lg-0'>
               <li className='nav-item'>
-                <Link className='nav-link active' aria-current='page' to='cart'>
-                  <FaCartPlus fontSize='20px' /> <sup>4</sup>
+                <Link
+                  className='nav-link active'
+                  aria-current='page'
+                  to='/cart'
+                >
+                  <FaCartPlus fontSize='20px' />{' '}
+                  <sup>{cartItems && cartItems.length}</sup>
                 </Link>
               </li>
               {userInfo ? authLinks : guestLinks}

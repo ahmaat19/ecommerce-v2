@@ -26,7 +26,7 @@ const App = () => {
   return (
     <Router>
       <Navigation />
-      <main className='py-3'>
+      <main>
         <Route component={Routes} />
       </main>
       <Footer />

@@ -13,6 +13,7 @@ import PrivateRoute from '../routes/PrivateRoute'
 import AdminPrivateRoute from '../routes/AdminPrivateRoute'
 import UserLogHistoryScreen from '../../screens/LogHistoryScreen'
 import CartScreen from '../../screens/CartScreen'
+import ProductScreen from '../../screens/ProductScreen'
 
 const Routes = () => {
   return (
@@ -30,9 +31,11 @@ const Routes = () => {
         path='/admin/users/page/:pageNumber'
         component={UserListScreen}
       />
-      <Route path='/product-details' component={ProductDetailScreen} />
+
+      <Route path='/product/:id' component={ProductDetailScreen} />
       <Route path='/cart/:id?' component={CartScreen} />
 
+      <AdminPrivateRoute path='/admin/product' component={ProductScreen} />
       <Route component={NotFound} />
     </Switch>
   )
