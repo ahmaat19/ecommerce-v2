@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, removeFromCart } from '../actions/productActions'
-// import { createOrder } from '../actions/orderActions'
-import { FaTrash, FaCheckCircle } from 'react-icons/fa'
+import { FaTrash } from 'react-icons/fa'
 import placeHolder from '../no-image-available.webp'
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id
   const qty = location.search ? Number(location.search.split('=')[1]) : 1
-  const [mobile, setMobile] = useState('')
-  const [paidAmount, setPaidAmount] = useState(0.0)
-  const [discountAmount, setDiscountAmount] = useState(0.0)
 
   const dispatch = useDispatch()
   const cart = useSelector((state) => state.cart)
@@ -38,6 +34,10 @@ const CartScreen = ({ match, location, history }) => {
     return (Math.round(num * 100) / 100).toFixed(2)
   }
 
+  const checkoutHandler = () => {
+    history.push('/checkout')
+  }
+
   return (
     <div className='container'>
       {cartItems.length === 0 ? (
@@ -45,7 +45,7 @@ const CartScreen = ({ match, location, history }) => {
           Your cart is empty <Link to='/'> Go Back</Link>
         </div>
       ) : (
-        <table class='table table-sm table-borderless'>
+        <table className='table table-sm table-borderless'>
           <thead>
             <tr>
               <th scope='col'>
@@ -61,15 +61,15 @@ const CartScreen = ({ match, location, history }) => {
               <th scope='col'>
                 <h6>Total</h6>
               </th>
-              <td>
+              <th scope='col'>
                 <h6> Action</h6>
-              </td>
+              </th>
             </tr>
           </thead>
           <tbody>
             {cartItems.map((item) => (
-              <tr key={item._id} className='border-button-1 my-auto'>
-                <th scope='row' class='align-middle'>
+              <tr key={item.product} className='border-button-1 my-auto'>
+                <th scope='row' className='align-middle'>
                   <img
                     src={item.image ? item.image.imagePath : placeHolder}
                     alt=''
@@ -77,8 +77,8 @@ const CartScreen = ({ match, location, history }) => {
                   />{' '}
                   {item.name}
                 </th>
-                <th class='align-middle'>${addDecimal(item.price)}</th>
-                <th class='align-middle'>
+                <th className='align-middle'>${addDecimal(item.price)}</th>
+                <th className='align-middle'>
                   <select
                     className='btn border-1 border-light btn-sm shadow-none mx-1 rounded-pill'
                     name='qty'
@@ -95,10 +95,10 @@ const CartScreen = ({ match, location, history }) => {
                     ))}
                   </select>
                 </th>
-                <th class='align-middle'>
+                <th className='align-middle'>
                   ${addDecimal(item.price * item.qty)}
                 </th>
-                <th class='align-middle'>
+                <th className='align-middle'>
                   <button
                     type='button'
                     className='btn btn-danger btn-sm '
@@ -122,14 +122,14 @@ const CartScreen = ({ match, location, history }) => {
               <td></td>
               <td></td>
               <td></td>
-              <td colspan='2'>
+              <td colSpan='2'>
                 {userInfo && userInfo ? (
-                  <Link
-                    to='/checkout'
+                  <button
+                    onClick={checkoutHandler}
                     className='btn btn-info bg-primary  rounded-pill'
                   >
                     Proceed To Checkout
-                  </Link>
+                  </button>
                 ) : (
                   <div className='alert alert-info text-center'>
                     Please <Link to='/login'> LOGIN </Link> to proceed the

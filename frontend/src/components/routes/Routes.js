@@ -14,6 +14,8 @@ import AdminPrivateRoute from '../routes/AdminPrivateRoute'
 import UserLogHistoryScreen from '../../screens/LogHistoryScreen'
 import CartScreen from '../../screens/CartScreen'
 import ProductScreen from '../../screens/ProductScreen'
+import CheckoutScreen from '../../screens/CheckoutScreen'
+import PlaceOrderScreen from '../../screens/PlaceOrderScreen'
 
 const Routes = () => {
   return (
@@ -34,6 +36,8 @@ const Routes = () => {
 
       <Route path='/product/:id' component={ProductDetailScreen} />
       <Route path='/cart/:id?' component={CartScreen} />
+      <PrivateRoute path='/checkout' component={CheckoutScreen} />
+      <PrivateRoute path='/place-order' component={PlaceOrderScreen} />
 
       <AdminPrivateRoute path='/admin/product' component={ProductScreen} />
       <Route component={NotFound} />
