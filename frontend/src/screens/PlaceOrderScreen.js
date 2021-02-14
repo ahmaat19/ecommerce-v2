@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 // import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetails } from '../actions/orderActions'
+import { getOrderDetails, payOrder } from '../actions/orderActions'
+import { ORDER_PAY_RESET } from '../constants/orderConstants'
+
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { PayPalButton } from 'react-paypal-button-v2'
@@ -10,9 +13,14 @@ import moment from 'moment'
 
 const PlaceOrderScreen = ({ match }) => {
   const orderId = match.params.id
+  const [sdkReady, setSdkReady] = useState(false)
+
   const dispatch = useDispatch()
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
+
+  const orderPay = useSelector((state) => state.orderPay)
+  const { loading: loadingPay, success: successPay } = orderPay
 
   const addDecimal = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2)
@@ -22,20 +30,36 @@ const PlaceOrderScreen = ({ match }) => {
     dispatch(getOrderDetails(orderId))
   }, [orderId, dispatch])
 
-  console.log(order && order)
+  useEffect(() => {
+    const addPayPalScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal')
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      script.async = true
+      script.onload = () => {
+        setSdkReady(true)
+      }
+      document.body.appendChild(script)
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // dispatch(
-    //   orderPlace({
-    //     cartItems,
-    //     billingAddress,
-    //     userInfo
-    //   })
-    // )
+    if (!order || successPay || order._id !== orderId) {
+      dispatch({ type: ORDER_PAY_RESET })
+      dispatch(getOrderDetails(orderId))
+    } else if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript()
+      } else {
+        setSdkReady(true)
+      }
+    }
+  }, [orderId, dispatch, successPay, order])
+
+  const successPaymentHandler = (paymentResult) => {
+    console.log(paymentResult)
+    dispatch(payOrder(orderId, paymentResult))
   }
 
-  const successPaymentHandler = (e) => {}
   return (
     <div className='container'>
       {loading ? (
@@ -62,24 +86,33 @@ const PlaceOrderScreen = ({ match }) => {
                     <li className='list-group-item'>
                       Total: ${addDecimal(order.totalPrice)}
                     </li>
-                    <li className='list-group-item'>
+
+                    <li
+                      className={`list-group-item ${
+                        !order.isPaid
+                          ? 'bg-danger text-light'
+                          : 'bg-info text-light'
+                      }`}
+                    >
                       Paid At:{' '}
                       {!order.isPaid ? (
-                        <span className='alert alert-danger form-control'>
-                          Not Paid
-                        </span>
+                        'Not Paid'
                       ) : (
                         <Moment format='YYYY-MM-DD HH:mm:ss'>
                           {moment(order.paidAt && order.paidAt)}
                         </Moment>
                       )}
                     </li>
-                    <li className='list-group-item'>
+                    <li
+                      className={`list-group-item ${
+                        !order.isDelivered
+                          ? 'bg-danger text-light'
+                          : 'bg-info text-light'
+                      }`}
+                    >
                       Delivered At:{' '}
                       {!order.isDelivered ? (
-                        <span className='alert alert-danger form-control'>
-                          Not Delivered
-                        </span>
+                        'Not Delivered'
                       ) : (
                         <Moment format='YYYY-MM-DD HH:mm:ss'>
                           {moment(order.deliveredAt && order.deliveredAt)}
@@ -165,22 +198,29 @@ const PlaceOrderScreen = ({ match }) => {
                 </table>
               </div>
               <div className='col-lg-4 col-md-5 col-sm-12 col-12'>
-                <form onSubmit={(e) => handleSubmit()}>
-                  <div className='card border-0 bg-secondary'>
-                    <div className='card-body'>
-                      <div className='card-text'>
-                        <p>
-                          Pay via PayPal; you can pay with your credit card if
-                          you don’t have a PayPal account.
-                        </p>
-                        <PayPalButton
-                          amount={22}
-                          onSuccess={successPaymentHandler}
-                        />
-                      </div>
+                <div className='card border-0 bg-secondary'>
+                  <div className='card-body'>
+                    <div className='card-text'>
+                      <p>
+                        Pay via PayPal; you can pay with your credit card if you
+                        don’t have a PayPal account.
+                      </p>
+                      {!order.isPaid && (
+                        <>
+                          {loadingPay && <Loader />}
+                          {!sdkReady ? (
+                            <Loader />
+                          ) : (
+                            <PayPalButton
+                              amount={order.totalPrice}
+                              onSuccess={successPaymentHandler}
+                            />
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </>

@@ -16,6 +16,7 @@ import CartScreen from '../../screens/CartScreen'
 import ProductScreen from '../../screens/ProductScreen'
 import CheckoutScreen from '../../screens/CheckoutScreen'
 import PlaceOrderScreen from '../../screens/PlaceOrderScreen'
+import OrderListScreen from '../../screens/OrderListScreen'
 
 const Routes = () => {
   return (
@@ -39,6 +40,7 @@ const Routes = () => {
       <PrivateRoute path='/checkout' component={CheckoutScreen} />
       <PrivateRoute path='/order/:id' component={PlaceOrderScreen} />
 
+      <AdminPrivateRoute path='/admin/order' component={OrderListScreen} />
       <AdminPrivateRoute path='/admin/product' component={ProductScreen} />
       <Route component={NotFound} />
     </Switch>

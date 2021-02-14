@@ -40,7 +40,6 @@ export const cartReducer = (
       return {
         ...state,
         cartItems: [],
-        billingAddress: [],
       }
 
     default:

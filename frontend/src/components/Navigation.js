@@ -60,6 +60,11 @@ const Navigation = () => {
               </Link>
             </li>
             <li>
+              <Link to='/admin/order' className='dropdown-item'>
+                Order
+              </Link>
+            </li>
+            <li>
               <Link to='/admin/users' className='dropdown-item'>
                 Users
               </Link>

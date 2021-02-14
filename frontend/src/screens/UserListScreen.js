@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { FaEdit, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaTrash, FaPlus, FaTimes, FaCheckCircle } from 'react-icons/fa'
 import {
   listUsers,
   deleteUser,
@@ -223,11 +223,11 @@ const UserListScreen = () => {
       <div className='d-flex justify-content-between align-items-center'>
         <h1>Users</h1>
         <button
-          className='btn btn-light btn-sm'
+          className='btn btn-light bg-primary btn-sm'
           data-bs-toggle='modal'
           data-bs-target='#editUserModal'
         >
-          <i className='fas fa-plus'></i> REGISTER NEW USER
+          <FaPlus /> REGISTER NEW USER
         </button>
       </div>
 
@@ -263,15 +263,9 @@ const UserListScreen = () => {
                     </td>
                     <td>
                       {user.isAdmin ? (
-                        <i
-                          className='fas fa-check'
-                          style={{ color: 'green' }}
-                        ></i>
+                        <FaCheckCircle color='green' />
                       ) : (
-                        <i
-                          className='fas fa-times'
-                          style={{ color: 'red' }}
-                        ></i>
+                        <FaTimes color='red' />
                       )}
                     </td>
                     <td className='btn-group'>

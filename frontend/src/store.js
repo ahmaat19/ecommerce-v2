@@ -22,9 +22,9 @@ import {
   orderCreateReducer,
   // orderDeliverReducer,
   orderDetailsReducer,
-  // orderListMyReducer,
-  // orderListReducer,
-  // orderPayReducer,
+  orderListMyReducer,
+  orderListReducer,
+  orderPayReducer,
 } from './reducers/orderReducers'
 
 const reducer = combineReducers({
@@ -44,9 +44,9 @@ const reducer = combineReducers({
 
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
-  // orderPay: orderPayReducer,
-  // orderListMy: orderListMyReducer,
-  // orderList: orderListReducer,
+  orderPay: orderPayReducer,
+  orderListMy: orderListMyReducer,
+  orderList: orderListReducer,
   // orderDeliver: orderDeliverReducer,
 
   cart: cartReducer,
