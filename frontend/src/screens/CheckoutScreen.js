@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveBillingAddress } from '../actions/cartActions'
+import { createOrder } from '../actions/orderActions'
+import Message from '../components/Message'
+import { removeAllFromCart } from '../actions/productActions'
 
 const CheckoutScreen = ({ history }) => {
   const [city, setCity] = useState('')
@@ -9,7 +12,10 @@ const CheckoutScreen = ({ history }) => {
 
   const dispatch = useDispatch()
   const cart = useSelector((state) => state.cart)
-  const { billingAddress } = cart
+  const { cartItems, billingAddress } = cart
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   const cartCity = billingAddress ? billingAddress.city : ''
   const cartAddress = billingAddress ? billingAddress.address : ''
@@ -24,17 +30,42 @@ const CheckoutScreen = ({ history }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     dispatch(saveBillingAddress({ address, city, mobile }))
-    history.push('/place-order')
 
-    console.log({
-      city,
-      address,
-      mobile,
-    })
+    const totalPrice = cartItems
+      .reduce((acc, item) => acc + item.qty * item.price, 0)
+      .toFixed(2)
+
+    if (billingAddress) {
+      dispatch(
+        createOrder({
+          orderItems: cartItems,
+          billingAddress: {
+            city,
+            address,
+            mobile,
+          },
+          totalPrice,
+          userInfo,
+        })
+      )
+    }
   }
+
+  const orderCreate = useSelector((state) => state.orderCreate)
+  const { order, success, error } = orderCreate
+
+  useEffect(() => {
+    if (success) {
+      dispatch(removeAllFromCart())
+      history.push(`/order/${order._id}`)
+    }
+
+    // eslint-disable-next-line
+  }, [history, success])
 
   return (
     <div className='container'>
+      {error && <Message variant='danger'>{error}</Message>}
       <div className='row'>
         <div className='col-lg-8 col-md-6 col-sm-12 col-12 mx-auto'>
           <h5>Billing Details</h5> <hr />

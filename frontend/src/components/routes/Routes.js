@@ -37,7 +37,7 @@ const Routes = () => {
       <Route path='/product/:id' component={ProductDetailScreen} />
       <Route path='/cart/:id?' component={CartScreen} />
       <PrivateRoute path='/checkout' component={CheckoutScreen} />
-      <PrivateRoute path='/place-order' component={PlaceOrderScreen} />
+      <PrivateRoute path='/order/:id' component={PlaceOrderScreen} />
 
       <AdminPrivateRoute path='/admin/product' component={ProductScreen} />
       <Route component={NotFound} />

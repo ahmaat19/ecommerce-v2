@@ -18,6 +18,14 @@ import {
   productDeleteReducer,
 } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
+import {
+  orderCreateReducer,
+  // orderDeliverReducer,
+  orderDetailsReducer,
+  // orderListMyReducer,
+  // orderListReducer,
+  // orderPayReducer,
+} from './reducers/orderReducers'
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -33,6 +41,13 @@ const reducer = combineReducers({
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
   productDelete: productDeleteReducer,
+
+  orderCreate: orderCreateReducer,
+  orderDetails: orderDetailsReducer,
+  // orderPay: orderPayReducer,
+  // orderListMy: orderListMyReducer,
+  // orderList: orderListReducer,
+  // orderDeliver: orderDeliverReducer,
 
   cart: cartReducer,
 })

@@ -13,7 +13,11 @@ import {
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DELETE_FAIL,
 } from '../constants/productConstants'
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../constants/cartConstants'
+import {
+  CART_ADD_ITEM,
+  CART_REMOVE_ITEM,
+  CART_REMOVE_ALL_ITEMS,
+} from '../constants/cartConstants'
 
 export const listProduct = () => async (dispatch) => {
   try {
@@ -155,4 +159,16 @@ export const removeFromCart = (id) => (dispatch, getState) => {
   })
 
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+}
+
+export const removeAllFromCart = () => (dispatch, getState) => {
+  dispatch({
+    type: CART_REMOVE_ALL_ITEMS,
+  })
+
+  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+  localStorage.setItem(
+    'billingAddress',
+    JSON.stringify(getState().cart.billingAddress)
+  )
 }

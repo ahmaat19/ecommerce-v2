@@ -2,6 +2,7 @@ import {
   CART_REMOVE_ITEM,
   CART_ADD_ITEM,
   CART_SAVE_BILLING_ADDRESS,
+  CART_REMOVE_ALL_ITEMS,
 } from '../constants/cartConstants'
 
 export const cartReducer = (
@@ -34,6 +35,12 @@ export const cartReducer = (
       return {
         ...state,
         billingAddress: action.payload,
+      }
+    case CART_REMOVE_ALL_ITEMS:
+      return {
+        ...state,
+        cartItems: [],
+        billingAddress: [],
       }
 
     default:
